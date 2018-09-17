@@ -15,7 +15,7 @@ module V1
     def password_auth(username, password)
       user = User.find_by(username: username).try(:authenticate, password)
       if user.present?
-        reponse_template(user.username)
+        reponse_template(user.id)
       else
         render json: { error: "wrong username or password" }, status: :unauthorized
       end
@@ -25,7 +25,7 @@ module V1
       begin 
         auth_token = AuthToken.decode(refresh_token)
         if auth_token.token_type == "refresh"
-          reponse_template(auth_token.username)
+          reponse_template(auth_token.user_id)
         else
           render json: {error: "wrong token type"}, status: :unauthorized
         end
@@ -34,9 +34,9 @@ module V1
       end
     end
 
-    def reponse_template(username)
-      access_token = AuthToken.encode(username, 15.minutes.from_now, "access")
-      refresh_token = AuthToken.encode(username, 14.days.from_now, "refresh")
+    def reponse_template(user_id)
+      access_token = AuthToken.encode(user_id, 15.minutes.from_now, "access")
+      refresh_token = AuthToken.encode(user_id, 14.days.from_now, "refresh")
       render json: {
         token_type: "bearer",
         access_token: access_token,

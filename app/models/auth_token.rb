@@ -1,8 +1,8 @@
 class AuthToken
-  attr_accessor :username, :expire_date, :token_type, :payload, :header
+  attr_accessor :user_id, :expire_date, :token_type, :payload, :header
 
   def initialize(decode_token)
-    @username = decode_token[0]["sub"]
+    @user_id = decode_token[0]["sub"]
     @expire_date = Time.at(decode_token[0]["exp"])
     @token_type = decode_token[0]["typ"]
     @payload = decode_token[0]
@@ -10,9 +10,9 @@ class AuthToken
   end
 
   class << self
-    def encode(username, expire_date, token_type = "access")
+    def encode(user_id, expire_date, token_type = "access")
       payload = {
-        sub: username,
+        sub: user_id,
         typ: token_type,
         exp: expire_date.to_i,
         nbf: -1.second.from_now.to_i,
