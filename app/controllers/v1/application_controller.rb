@@ -18,7 +18,8 @@ module V1
 
     private
     def access_token
-      request.headers.fetch(:Authorization).try(:split, " ").try(:last)
+      pp request.headers["Authorization"]
+      request.headers["Authorization"].try(:split, " ").try(:last)
     end
   end
 end

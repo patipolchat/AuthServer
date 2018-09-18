@@ -12,7 +12,7 @@ class User < ApplicationRecord
   validates :name,
     presence: true
   
-  validates :password, length: { in: 6..20 }
+  validates :password, length: { in: 5..20 }
 
   def as_json(options = {})
     super(options.merge(except: :password_digest))
