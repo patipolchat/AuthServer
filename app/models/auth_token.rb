@@ -1,8 +1,9 @@
 class AuthToken
-  attr_accessor :user_id, :expire_date, :token_type, :payload, :header
+  attr_accessor :user_id, :expire_date, :token_type, :payload, :header, :user
 
   def initialize(decode_token)
     @user_id = decode_token[0]["sub"]
+    @user = User.find(@user_id)
     @expire_date = Time.at(decode_token[0]["exp"])
     @token_type = decode_token[0]["typ"]
     @payload = decode_token[0]
